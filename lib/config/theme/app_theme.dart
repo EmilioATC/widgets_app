@@ -8,7 +8,9 @@ const colorList = <Color>[
   Colors.pink,
   Colors.purple,
   Colors.lime,
-  Colors.teal
+  Colors.teal,
+  Colors.black,
+  Colors.orangeAccent
 ];
 
 class AppTheme {
@@ -27,4 +29,11 @@ class AppTheme {
           centerTitle: false,
         )
       );
+  AppTheme copyWith({
+    int? selectedColor,
+    bool? isDarkMode,
+  }) => AppTheme(
+    selectedColor: selectedColor ?? this.selectedColor,
+    isDarkMode: isDarkMode ?? this.isDarkMode,
+  );
 }

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:widgets_app/presentation/screens/providers/theme_provider.dart';
@@ -10,7 +12,7 @@ class ThemeChangerScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final bool isDarkmode = ref.watch( isDarkmodeProvider);
+    final bool isDarkmode = ref.watch( themeNotifierProvider).isDarkMode;
 
     return Scaffold(
       appBar: AppBar(
@@ -19,7 +21,8 @@ class ThemeChangerScreen extends ConsumerWidget {
           IconButton(
             icon: Icon(isDarkmode ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
             onPressed: () => {
-              ref.read(isDarkmodeProvider.notifier).state = !isDarkmode,
+              // ref.read(isDarkmodeProvider.notifier).state = !isDarkmode,
+              ref.read(themeNotifierProvider.notifier).toggleDarkMode(),
             },
           ),
         ],
@@ -37,19 +40,21 @@ class _ThemeChangerView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) { 
 
     final List<Color> colors = ref.watch(colorListProvider);
+    final int selectedColor = ref.watch(themeNotifierProvider).selectedColor;
+
     return ListView.builder(
       itemCount: colors.length,
       itemBuilder: (context, index) {
         final Color color = colors[index];
-        final int selectedColor = ref.watch(selectedColorProvider);
         return RadioListTile(
           title: Text('Este color', style: TextStyle(color: color),),
-          subtitle: Text('${color.value}'),
+          subtitle: Text('${color.r}'),
           value: index,
           activeColor: color,
           groupValue: selectedColor,
           onChanged: (value) {
-            ref.read(selectedColorProvider.notifier).state = index;
+            // ref.read(selectedColorProvider.notifier).state = index;
+            ref.read(themeNotifierProvider.notifier).changeColor(index);
           },
         );
       },
